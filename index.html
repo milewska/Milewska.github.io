@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Trips Map from Addresses</title>
+    <title>Trips Map from Addresses Update</title>
     <style>
       #map {
         height: 90vh;
@@ -66,6 +66,8 @@
             });
           }
         }
+        // After placing all markers
+        document.body.insertAdjacentHTML('beforeend', `<table border="1"><tr><th>Trip Name</th><th>Address</th></tr>${trips.map(t => `<tr><td>${t.name}</td><td>${t.address}</td></tr>`).join('')}</table>`);
       }
     </script>
 
