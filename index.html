@@ -1,76 +1,25 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Coda Trip Data</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        padding: 2rem;
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        margin-top: 20px;
-      }
-      th, td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
-      }
-    </style>
-  </head>
+  <head><title>Check Coda Tables</title></head>
   <body>
-    <h1>Trips from Coda</h1>
-    <div id="loading">Loading data...</div>
-    <table id="tripTable" style="display:none;">
-      <thead>
-        <tr>
-          <th>Trip Name</th>
-          <th>Location</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
+    <h1>Inspecting Coda Tables...</h1>
+    <pre id="output">Loading...</pre>
     <script>
       const CODA_API_TOKEN = 'fd33c17c-f859-49aa-9007-de437a4d642f';
-      const DOC_ID = 'dyU8ag5Yx9I'; // Extracted from your full doc slug
-      const TABLE_ID = 'Trips';
+      const DOC_ID = 'dyU8ag5Yx9I';
 
-      async function loadTrips() {
-        try {
-          const res = await fetch(`https://coda.io/apis/v1/docs/${DOC_ID}/tables/${TABLE_ID}/rows`, {
-            headers: {
-              Authorization: `Bearer ${CODA_API_TOKEN}`
-            }
-          });
-
-          const data = await res.json();
-          const tbody = document.querySelector('#tripTable tbody');
-          document.getElementById('loading').style.display = 'none';
-
-          if (!data.items) {
-            document.body.insertAdjacentHTML('beforeend', `<p style="color: red;">Failed to load data from Coda.</p>`);
-            console.error("No 'items' in response:", data);
-            return;
-          }
-
-          data.items.forEach(row => {
-            const values = row.values;
-            const tripName = values['Trip'] || 'Unnamed';
-            const location = values['Location'] || 'Unknown';
-            const rowHTML = `<tr><td>${tripName}</td><td>${location}</td></tr>`;
-            tbody.insertAdjacentHTML('beforeend', rowHTML);
-          });
-
-          document.getElementById('tripTable').style.display = 'table';
-        } catch (err) {
-          console.error('Error loading trips:', err);
-          document.getElementById('loading').textContent = 'Error loading data.';
+      fetch(`https://coda.io/apis/v1/docs/${DOC_ID}/tables`, {
+        headers: {
+          Authorization: `Bearer ${CODA_API_TOKEN}`
         }
-      }
-
-      loadTrips();
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+      })
+      .catch(err => {
+        document.getElementById('output').textContent = 'Error: ' + err;
+      });
     </script>
   </body>
 </html>
