@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Trips Map from Addresses</title>
+    <style>
+      #map {
+        height: 90vh;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Trips Map</h1>
+    <div id="map"></div>
+
+    <script>
+      const CODA_API_TOKEN = 'fd33c17c-f859-49aa-9007-de437a4d642f';
+      const DOC_ID = 'Ryugu-Jo-Dragon-Palace_dyU8ag5Yx9I/Playground_sugoQ5cP';
+      const TABLE_ID = 'Trips';
+      const GOOGLE_MAPS_API_KEY = 'AIzaSyBBfP6bL3mmcznLSgj7pYX8t5E5lbiOt38';
+
+      async function getTripData() {
+        const res = await fetch(`https://coda.io/apis/v1/docs/${DOC_ID}/tables/${TABLE_ID}/rows`, {
+          headers: {
+            Authorization: `Bearer ${CODA_API_TOKEN}`,
+          },
+        });
+        const data = await res.json();
+        return data.items.map(row => {
+          const values = row.values;
+          return {
+            name: values['Trip'],
+            address: values['Location'],
+          };
+        });
+      }
+
+      async function geocodeAddress(address) {
+        const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_MAPS_API_KEY}`);
+        const data = await res.json();
+        if (data.status === 'OK') {
+          return data.results[0].geometry.location;
+        } else {
+          console.warn(`Geocode failed for ${address}: ${data.status}`);
+          return null;
+        }
+      }
+
+      async function initMap() {
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 2,
+          center: { lat: 20, lng: 0 },
+        });
+
+        const trips = await getTripData();
+
+        for (const trip of trips) {
+          const location = await geocodeAddress(trip.address);
+          if (location) {
+            new google.maps.Marker({
+              position: location,
+              map,
+              title: trip.name,
+            });
+          }
+        }
+      }
+    </script>
+
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBfP6bL3mmcznLSgj7pYX8t5E5lbiOt38&callback=initMap">
+    </script>
+  </body>
+</html>
