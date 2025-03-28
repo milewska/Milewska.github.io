@@ -14,12 +14,16 @@
     <div id="map"></div>
 
     <script>
+      console.warn("InitWarn");
+        consolde.log("InitLog";
       const CODA_API_TOKEN = 'fd33c17c-f859-49aa-9007-de437a4d642f';
       const DOC_ID = 'Ryugu-Jo-Dragon-Palace_dyU8ag5Yx9I/Playground_sugoQ5cP';
       const TABLE_ID = 'Trips';
       const GOOGLE_MAPS_API_KEY = 'AIzaSyBBfP6bL3mmcznLSgj7pYX8t5E5lbiOt38';
 
       async function getTripData() {
+        console.warn("getTripData");
+        consolde.log("GTD";
         const res = await fetch(`https://coda.io/apis/v1/docs/${DOC_ID}/tables/${TABLE_ID}/rows`, {
           headers: {
             Authorization: `Bearer ${CODA_API_TOKEN}`,
