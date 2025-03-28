@@ -26,8 +26,9 @@
         console.log("GTD");
         const res = await fetch(`https://coda.io/apis/v1/docs/${DOC_ID}/tables/${TABLE_ID}/rows`, {
           headers: {
-            Authorization: `Bearer ${CODA_API_TOKEN}`,
+            Authorization: 'Bearer ${CODA_API_TOKEN}',
           },
+          console.log(res.json());
         });
         const data = await res.json();
         return data.items.map(row => {
