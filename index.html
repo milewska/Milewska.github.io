@@ -1,85 +1,76 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Trips Map from Addresses Update</title>
+    <title>Coda Trip Data</title>
     <style>
-      #map {
-        height: 90vh;
+      body {
+        font-family: sans-serif;
+        padding: 2rem;
+      }
+      table {
+        border-collapse: collapse;
         width: 100%;
+        margin-top: 20px;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
       }
     </style>
   </head>
   <body>
-    <h1>Trips Map UP2D</h1>
-    <div id="map"></div>
+    <h1>Trips from Coda</h1>
+    <div id="loading">Loading data...</div>
+    <table id="tripTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>Trip Name</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
     <script>
-      console.warn("InitWarn");
-      console.log("InitLog");
       const CODA_API_TOKEN = 'fd33c17c-f859-49aa-9007-de437a4d642f';
-      const DOC_ID = 'Ryugu-Jo-Dragon-Palace_dyU8ag5Yx9I/Playground_sugoQ5cP';
+      const DOC_ID = 'dyU8ag5Yx9I'; // Extracted from your full doc slug
       const TABLE_ID = 'Trips';
-      const GOOGLE_MAPS_API_KEY = 'AIzaSyBBfP6bL3mmcznLSgj7pYX8t5E5lbiOt38';
 
-      async function getTripData() {
-        console.warn("getTripData");
-        console.log("GTD");
-        const res = await fetch(`https://coda.io/apis/v1/docs/${DOC_ID}/tables/${TABLE_ID}/rows`, {
-          headers: {
-            Authorization: 'Bearer ${CODA_API_TOKEN}',
-          },
-          console.log(res.json());
-        });
-        const data = await res.json();
-        return data.items.map(row => {
-          const values = row.values;
-          console.log("Name: "+values['Trip']);
-          console.log(values);
-          return {
-            name: values['Trip'],
-            address: values['Location'],
-          };
-        });
-      }
+      async function loadTrips() {
+        try {
+          const res = await fetch(`https://coda.io/apis/v1/docs/${DOC_ID}/tables/${TABLE_ID}/rows`, {
+            headers: {
+              Authorization: `Bearer ${CODA_API_TOKEN}`
+            }
+          });
 
-      async function geocodeAddress(address) {
-        const res = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${GOOGLE_MAPS_API_KEY}`);
-        const data = await res.json();
-        if (data.status === 'OK') {
-          return data.results[0].geometry.location;
-        } else {
-          console.warn(`Geocode failed for ${address}: ${data.status}`);
-          return null;
-        }
-      }
+          const data = await res.json();
+          const tbody = document.querySelector('#tripTable tbody');
+          document.getElementById('loading').style.display = 'none';
 
-      async function initMap() {
-        const map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 5,
-          center: { lat: 20, lng: 0 },
-        });
-
-        const trips = await getTripData();
-
-        for (const trip of trips) {
-          const location = await geocodeAddress(trip.address);
-          if (location) {
-            new google.maps.Marker({
-              position: location,
-              map,
-              title: trip.name,
-            });
+          if (!data.items) {
+            document.body.insertAdjacentHTML('beforeend', `<p style="color: red;">Failed to load data from Coda.</p>`);
+            console.error("No 'items' in response:", data);
+            return;
           }
-        }
-        // After placing all markers
-        document.body.insertAdjacentHTML('beforeend', `<table border="1"><tr><th>Trip Name</th><th>Address</th></tr>${trips.map(t => `<tr><td>${t.name}</td><td>${t.address}</td></tr>`).join('')}</table>`);
-      }
-    </script>
 
-    <script
-      async
-      defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBfP6bL3mmcznLSgj7pYX8t5E5lbiOt38&callback=initMap">
+          data.items.forEach(row => {
+            const values = row.values;
+            const tripName = values['Trip'] || 'Unnamed';
+            const location = values['Location'] || 'Unknown';
+            const rowHTML = `<tr><td>${tripName}</td><td>${location}</td></tr>`;
+            tbody.insertAdjacentHTML('beforeend', rowHTML);
+          });
+
+          document.getElementById('tripTable').style.display = 'table';
+        } catch (err) {
+          console.error('Error loading trips:', err);
+          document.getElementById('loading').textContent = 'Error loading data.';
+        }
+      }
+
+      loadTrips();
     </script>
   </body>
 </html>
