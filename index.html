@@ -1,24 +1,48 @@
 <!DOCTYPE html>
 <html>
-  <head><title>List My Coda Docs</title></head>
+  <head>
+    <title>Trips Map & Table from Coda</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+      }
+      #map {
+        height: 50vh;
+        width: 100%;
+      }
+      #table-container {
+        padding: 2rem;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+    </style>
+  </head>
   <body>
-    <h1>Docs I Can Access</h1>
-    <pre id="output">Loading...</pre>
-    <script>
-      const CODA_API_TOKEN = 'fd33c17c-f859-49aa-9007-de437a4d642f';
+    <h1 style="padding: 1rem;">Trips Map & Table</h1>
+    <div id="map">Loading map...</div>
+    <div id="table-container">
+      <div id="loading">Loading data...</div>
+      <table id="tripTable" style="display:none;">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-      fetch('https://coda.io/apis/v1/docs', {
-        headers: {
-          Authorization: `Bearer ${CODA_API_TOKEN}`
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('output').textContent = JSON.stringify(data, null, 2);
-      })
-      .catch(err => {
-        document.getElementById('output').textContent = 'ERROR: ' + err;
-      });
+    <!-- External JS Files -->
+    <script src="codaConfig.js"></script>
+    <script src="mapLogic.js"></script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBfP6bL3mmcznLSgj7pYX8t5E5lbiOt38&callback=initMap">
     </script>
   </body>
 </html>
