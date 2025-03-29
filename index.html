@@ -38,9 +38,13 @@
       </table>
     </div>
 
-    <!-- External JS Files -->
+    <!-- Load config first -->
     <script src="codaConfig.js"></script>
+
+    <!-- Then logic -->
     <script src="mapLogic.js"></script>
+
+    <!-- Google Maps last, triggers initMap() -->
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBfP6bL3mmcznLSgj7pYX8t5E5lbiOt38&callback=initMap">
     </script>
