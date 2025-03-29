@@ -1,17 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Test Coda API Connection</title>
-  </head>
   <body>
-    <h1>Testing Coda API Connection</h1>
-    <pre id="output">Connecting...</pre>
-
+    <pre id="output">Checking token owner...</pre>
     <script>
       const CODA_API_TOKEN = 'fd33c17c-f859-49aa-9007-de437a4d642f';
-      const DOC_ID = 'dyU8ag5Yx9I';
 
-      fetch(`https://coda.io/apis/v1/docs/${DOC_ID}`, {
+      fetch('https://coda.io/apis/v1/whoami', {
         headers: {
           Authorization: `Bearer ${CODA_API_TOKEN}`
         }
