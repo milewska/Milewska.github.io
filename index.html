@@ -1,52 +1,16 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <title>Trips Map & Table from Coda</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        margin: 0;
-      }
-      #map {
-        height: 50vh;
-        width: 100%;
-      }
-      #table-container {
-        padding: 2rem;
-      }
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        margin-top: 20px;
-      }
-      th, td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
-        vertical-align: top;
-      }
-    </style>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+    <title>Life Dance Timeline</title>
   </head>
-  <body>
-    <h1 style="padding: 1rem;">Trips Map & Table</h1>
-    <div id="map">Loading map...</div>
-    <div id="table-container">
-      <div id="loading">Loading data...</div>
-      <table id="tripTable" style="display:none;">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- Load config first -->
-    <script src="codaConfig.js"></script>
-
-    <!-- Then logic -->
-    <script src="mapLogic.js"></script>
-
-    <!-- Google Maps last, triggers initMap() -->
-    <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBfP6bL3mmcznLSgj7pYX8t5E5lbiOt38&callback=initMap">
-    </script>
+  <body class="bg-background">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
