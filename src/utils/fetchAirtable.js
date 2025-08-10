@@ -34,11 +34,15 @@ export async function fetchTableRecords(table) {
     offset = data.offset;
   } while (offset);
 
-  return all.map((r) => ({
-    ...r.fields,
-    name: r.fields['Phase Name'],
-    start: new Date(r.fields['Start Date']),
-    end: new Date(r.fields['End Date']),
-    strand: r.fields['Strand'] || 'General',
-  }));
+  return all.map((r) => {
+    const fieldEntries = Object.entries(r.fields);
+    const [firstColName, firstColValue] = fieldEntries[0] || ["", ""];
+    return {
+      ...r.fields,
+      title: `${firstColName}: ${firstColValue}`,
+      start: new Date(r.fields['Start Date']),
+      end: new Date(r.fields['End Date']),
+      strand: r.fields['Strand'] || 'General',
+    };
+  });
 }
