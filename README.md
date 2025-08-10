@@ -26,6 +26,13 @@ npm run dev
 npm run build
 ```
 
+## Deployment
+
+The project uses GitHub Pages for hosting. When changes are pushed to `main`,
+an automated workflow builds the site and publishes the `dist` folder to the
+`gh-pages` branch. Configure GitHub Pages to serve from the `gh-pages` branch
+to update [milewska.github.io](https://milewska.github.io).
+
 ## CSV Format
 
 The CSV must include the following headers:
