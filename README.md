@@ -28,7 +28,6 @@ npm run dev
 npm run build
 ```
 
-## Airtable Requirements
 
 Each selected table should include at least the following fields:
 
