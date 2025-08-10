@@ -1,6 +1,6 @@
 # Life Dance Timeline
 
-A single-page React application for visualizing the sacred rhythm of your life. Upload a CSV of life phases and explore them on an interactive timeline with optional AI-powered reflections via Google's Gemini API.
+A single-page React application for visualizing the sacred rhythm of your life. Connect directly to an Airtable base and explore its tables on an interactive timeline with optional AI-powered reflections via Google's Gemini API.
 
 ## Setup
 
@@ -8,10 +8,12 @@ A single-page React application for visualizing the sacred rhythm of your life. 
 npm install
 ```
 
-Create a `.env` file with your Gemini API key:
+Create a `.env` file with your API keys:
 
 ```
-VITE_GEMINI_API_KEY=your_key_here
+VITE_GEMINI_API_KEY=your_gemini_key
+VITE_AIRTABLE_API_KEY=your_airtable_key
+VITE_AIRTABLE_BASE_ID=your_base_id
 ```
 
 ## Development
@@ -26,15 +28,15 @@ npm run dev
 npm run build
 ```
 
-## CSV Format
+## Airtable Requirements
 
-The CSV must include the following headers:
+Each selected table should include at least the following fields:
 
 - `Phase Name`
 - `Start Date`
 - `End Date`
 
-Optional headers such as `Strand`, `Description`, `Poetry`, etc., will be displayed in the phase modal.
+Optional fields such as `Strand`, `Description`, `Poetry`, etc., will be displayed in the phase modal.
 
 ## Features
 
